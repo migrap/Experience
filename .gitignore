@@ -6,6 +6,11 @@
 *.user
 *.sln.docstates
 
+# Roslyn
+*.sln.ide/
+*.sln.ide/
+*.sln.ide/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
