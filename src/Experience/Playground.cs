@@ -7,23 +7,10 @@ using System.Threading.Tasks;
 using Experience;
 using Experience.Builders;
 using Experience.Models;
-using Experience.Extensions;
 
 namespace Experience {
     internal static class Playground {
         static Playground() {
-            (new HttpClient()).Get(statement: s => s
-            .Uuid("")
-            //.Verb(x => x.Answered)            
-            .Limit(10)
-            .Attachments()
-            .Ascending()
-            .Actor()             
-           );
-
-            (new HttpClient()).Post(statement: s => s
-                .Uuid("")
-            );
         }
     }
 
@@ -47,13 +34,53 @@ namespace Experience {
         }
     }
 
+	public interface IAttachmentBuilder {
+		IAttachmentBuilder Name(string value);
+	}
+
+	public class AttachmentBuilder : IAttachmentBuilder{
+				IAttachmentBuilder IAttachmentBuilder.Name(string value){
+					return this;
+				}
+	}
+
+	public interface IStateBuilder{
+		IStateBuilder ActivityUuid(string value);
+		IStateBuilder Actor(dynamic value);
+		IStateBuilder Registration(Guid value);
+		IStateBuilder Since(DateTimeOffset value);
+	}
+
+	internal class StateBuilder:IStateBuilder{
+		IStateBuilder IStateBuilder.ActivityUuid(string value) {
+			return this;
+		}
+		IStateBuilder IStateBuilder.Actor(dynamic value) {
+			return this;
+		}
+		IStateBuilder IStateBuilder.Registration(Guid value) {
+			return this;
+		}
+		IStateBuilder IStateBuilder.Since(DateTimeOffset value) {
+			return this;
+		}
+	}
+
     public static partial class Extensions {
         public static IStatementBuilder Actor(this IStatementBuilder builder, Action<IActorBuilder> value = null) {
             return builder;
         }
 
-        public static IStatementBuilder Verb(this IStatementBuilder builder, Func<Verb> answered) {
-            return builder;
-        }
+
+		public static IStatementBuilder Attachments(this IStatementBuilder builder, Action<IAttachmentBuilder> add = null){
+			return builder;
+		}
+
+		public static void Get(this HttpClient client, Action<IStateBuilder> state = null) {
+		}
+
+		public static void Post(this HttpClient client, Action<IStateBuilder> state = null) {
+
+		}
     }
 }

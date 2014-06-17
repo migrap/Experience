@@ -15,12 +15,26 @@ namespace Experience {
             return result;
         }
 
-        public static void Get(this HttpClient client, Action<IStatementBuilder> statement = null) {
-            Factory<IStatementBuilder, StatementBuilder>(statement).Build();
+		public static Task<HttpResponseMessage> Get(this HttpClient client, Action<IStatementBuilder> statement = null) {
+			return client.SendAsync(request: Factory<IStatementBuilder, GetStatementBuilder>(statement).Build());
         }
 
-        public static void Post(this HttpClient client, Action<IStatementBuilder> statement = null) {
+		public delegate HttpRequestMessage GetStatement(string verb=null, int? limit=null, string actor=null);
 
-        }
+		public static Task<HttpResponseMessage> Get(this HttpClient client, Func<GetStatement,HttpRequestMessage> statement=null){
+			var request = statement((verb, limit,actor) => {
+				return (HttpRequestMessage)null;
+			});
+			return client.SendAsync(request);
+		}
+			
+		public delegate HttpRequestMessage PostStatement(string verb=null, string actor=null);
+
+		public static Task<HttpResponseMessage> Post(this HttpClient client, Func<Func<string,string,HttpRequestMessage>,HttpRequestMessage> statement=null){
+			var request = statement((verb, actor) => {
+				return (HttpRequestMessage)null;
+			});
+			return client.SendAsync(request);
+		}
     }
 }

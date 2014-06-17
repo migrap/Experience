@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Experience {
     public static partial class Extensions {
-        //public static IStatementBuilder Verb(this IStatementBuilder builder, Expression<Func<IStatementBuilder, Func<Verb>>> verb) {
-        //    return builder.Verb(verb(builder)());
-        //}
+        public static IStatementBuilder Verb(this IStatementBuilder builder, Func<IVerbBuilder,Func<Verb>> verb) {
+			return builder.Verb(verb((IVerbBuilder)null)());
+        }
     }
 }
