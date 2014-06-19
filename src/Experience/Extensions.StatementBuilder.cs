@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience {
-    public static partial class Extensions {
-        public static IStatementBuilder Verb(this IStatementBuilder builder, Func<IVerbBuilder,Func<Verb>> verb) {
+	public static partial class Extensions {
+		public static IStatementBuilder Verb(this IStatementBuilder builder, Func<IVerbBuilder,Func<Verb>> verb) {
 			return builder.Verb(verb((IVerbBuilder)null)());
-        }
-    }
+		}
+	}
 }

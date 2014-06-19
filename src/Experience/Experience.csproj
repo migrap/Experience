@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\IStatementBuilder.cs" />
+    <Compile Include="Builders\PostStatementBuilder.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Extensions.StatementBuilder.cs" />
     <Compile Include="Extensions.Verbs.cs" />
