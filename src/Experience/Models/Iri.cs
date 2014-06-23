@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public abstract class Actor {
-        public abstract string ObjectType { get; }
-        public string Name { get; set; }
+    public class Iri : Uri {
+        public Iri(string value, UriKind kind) : base(value, kind) {
+        }
     }
 }

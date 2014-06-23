@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public struct Mailto {
+    public class Mailto : Uri{
         private string _value;
 
-        private Mailto(string value) {
-            _value = value;
+        private Mailto(string value) : base(Create(value), UriKind.Absolute) {
+
         }
 
         public override string ToString() {
@@ -23,6 +23,10 @@ namespace Experience.Models {
 
         public static implicit operator Mailto(string value) {
             return new Mailto(value);
+        }
+
+        private static string Create(string value) {
+            return (value.StartsWith("mailto:")) ? value : "mailto:" + value;
         }
     }
 }

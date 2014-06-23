@@ -18,16 +18,7 @@ namespace Experience.Builders {
         private JObject _jobject = new JObject();
 
         public PostStatementBuilder() {
-            _jobject = new JObject(new JProperty("actor"), new JProperty("object"), new JProperty("verb")
-                , new JProperty("id"), new JProperty("timestamp"), new JProperty("stored"), new JProperty("authority"), new JProperty("version"));
-
-            _jobject["id"] = "3fd37a7d-2404-4dbd-a3f0-4288a4ed6614";
-            _jobject["timestamp"] = "2014-06-19T00:32:54.783Z";
-            _jobject["stored"] = "2014-06-19T00:32:54.783Z";
-            _jobject["version"] = "1.0.0";
-            _jobject["authority"] = new JObject(new JProperty("account"), new JProperty("objectType"));
-            _jobject["authority"]["account"] = new JObject(new JProperty("homePage", "http://cloud.scorm.com/"), new JProperty("name", "anonymous"));
-            _jobject["authority"]["objectType"] = "Agent";
+            _jobject = new JObject(new JProperty("actor"), new JProperty("object"), new JProperty("verb"));                
         }
 
         public HttpRequestMessage Build() {
