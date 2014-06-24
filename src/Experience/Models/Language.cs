@@ -6,22 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public class Language : Dictionary<string, string> {
-        public int Id { get; set; }
-
-        public Language() {
+    public class Language : Dictionary<CultureInfo, string> {
+        public Language() {            
         }
 
         public Language(string value)
             : this(CultureInfo.CurrentCulture, value) {
         }
 
-        public Language(CultureInfo cultureInfo, string value)
-            : this(cultureInfo.Name, value) {
+        public Language(CultureInfo cultureInfo, string value) {
+            base.Add(cultureInfo, value);
         }
 
-        public Language(string name, string value) {
-            base.Add(name, value);
+        public Language(string name, string value) : this(CultureInfo.GetCultureInfo(name), value) {
         }
 
         public static implicit operator Language(string value) {

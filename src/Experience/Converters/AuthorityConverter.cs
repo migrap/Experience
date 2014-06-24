@@ -11,7 +11,7 @@ namespace Experience.Converters {
         private Dictionary<string, Type> _types = new Dictionary<string, Type>();
 
         public AuthorityConverter() : this(
-            x => x.Name("Account").Type<Account>(), 
+            x => x.Name("Agent").Type<Agent>(), 
             x => x.Name("Group").Type<Group>()) {
         }
 

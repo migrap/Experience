@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 
 namespace Experience.Models {
@@ -10,7 +11,7 @@ namespace Experience.Models {
             get { return Mbox.GetHash(); }
         }
         public string Openid { get; set; }
-        public Account Account { get; set; }
+        public IPrincipal Account { get; set; }
     }
 
     public static partial class Extensions {

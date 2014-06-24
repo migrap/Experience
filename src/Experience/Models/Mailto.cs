@@ -6,18 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public class Mailto : Uri{
-        private string _value;
-
-        private Mailto(string value) : base(Create(value), UriKind.Absolute) {
-
+    public class Mailto : Uri {
+        public Mailto(string value) : base(Create(value), UriKind.Absolute) {
         }
 
-        public override string ToString() {
-            return "mailto:" + _value;
-        }
-
-        public static implicit operator string(Mailto value) {
+        public static implicit operator string (Mailto value) {
             return value.ToString();
         }
 
@@ -26,7 +19,7 @@ namespace Experience.Models {
         }
 
         private static string Create(string value) {
-            return (value.StartsWith("mailto:")) ? value : "mailto:" + value;
+            return (value.StartsWith(Uri.UriSchemeMailto)) ? value : Uri.UriSchemeMailto + ":" + value;
         }
     }
 }
