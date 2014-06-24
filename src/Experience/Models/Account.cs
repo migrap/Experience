@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public abstract class Actor : InverseFunctionalIdentifier {
-        public abstract string ObjectType { get; }
+    public class Account {
+        public Uri HomePage { get; set; }
         public string Name { get; set; }
     }
 }

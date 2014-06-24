@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Experience.Models {
-    public abstract class Authority {
-        protected Authority(string objectType) {
-            ObjectType = objectType;
-        }
-        public string ObjectType { get; private set; }
+    public class Authority {
+        public string ObjectType { get; set; }
+        public Account Account { get; set; }
     }
 }

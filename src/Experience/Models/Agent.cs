@@ -9,10 +9,5 @@ namespace Experience.Models {
         public override string ObjectType {
             get { return "Agent"; }
         }
-
-        public InverseFunctionalIdentifier Ifi {
-            get;
-            set;
-        }
     }
 }

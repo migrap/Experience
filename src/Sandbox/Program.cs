@@ -14,9 +14,10 @@ namespace Sandbox {
 		public static void Main(string[] args) {
             var ci = CultureInfo.GetCultureInfo("en-US");
 
-            var json = "{\"id\":\"dac6f1e4-d670-45e0-9bf8-288289748d02\",\"actor\":{\"name\":\"Mr Coyle\",\"mbox\":\"mailto:mr@coyle.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/attempted\",\"display\":{\"und\":\"attempted\"}},\"context\":{\"contextActivities\":{\"grouping\":[{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"objectType\":\"Activity\"}]}},\"timestamp\":\"2014-06-23T23:34:11.265Z\",\"stored\":\"2014-06-23T23:34:11.882Z\",\"authority\":{\"account\":{\"homePage\":\"http://cloud.scorm.com/\",\"name\":\"anonymous\"},\"objectType\":\"Agent\"},\"version\":\"1.0.0\",\"object\":{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"definition\":{\"name\":{\"en-US\":\"Golf Example - Tin Can Course\"},\"description\":{\"en-US\":\"An overview of how to play the great game of golf.\"},\"type\":\"http://adlnet.gov/expapi/activities/course\"},\"objectType\":\"Activity\"}}";
+            var json = "{\"id\":\"dac6f1e4-d670-45e0-9bf8-288289748d02\",\"actor\":{\"name\":\"Mr Coyle\",\"mbox\":\"mailto:mr@coyle.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/attempted\",\"display\":{\"en-US\":\"attempted\"}},\"context\":{\"contextActivities\":{\"grouping\":[{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"objectType\":\"Activity\"}]}},\"timestamp\":\"2014-06-23T23:34:11.265Z\",\"stored\":\"2014-06-23T23:34:11.882Z\",\"authority\":{\"account\":{\"homePage\":\"http://cloud.scorm.com/\",\"name\":\"anonymous\"},\"objectType\":\"Agent\"},\"version\":\"1.0.0\",\"object\":{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"definition\":{\"name\":{\"en-US\":\"Golf Example - Tin Can Course\"},\"description\":{\"en-US\":\"An overview of how to play the great game of golf.\"},\"type\":\"http://adlnet.gov/expapi/activities/course\"},\"objectType\":\"Activity\"}}";
             var statement = Newtonsoft.Json.JsonConvert.DeserializeObject<Statement>(json);
-            
+
+            statement.Context.ContextActivities.Category = new Activity();
 
 
 
@@ -54,16 +55,7 @@ namespace Sandbox {
 
 			Console.ReadLine();
 		}
-	}
-
-    
-
-    
-
-    public class Account : Authority {
-        public Account() : base("Account") {
-        }
-    }
+	}    
 
     public delegate Statement PostStatementDelegate(Actor actor, Verb verb, Object @object, Object result = null, Object context = null, DateTimeOffset? timestamp = null, Authority authority = null, Object attachments = null);
 

@@ -1,17 +1,20 @@
-﻿using System;
+﻿using Experience.Converters;
+using Newtonsoft.Json;
+using System;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 
 namespace Experience.Models {
     //Inverse Functional Identifier
-    public class InverseFunctionalIdentifier {
+    public abstract class InverseFunctionalIdentifier {
+        [JsonConverter(typeof(MailtoConverter))]
         public Mailto Mbox { get; set; }
         public string Shasum {
             get { return Mbox.GetHash(); }
         }
         public string Openid { get; set; }
-        public IPrincipal Account { get; set; }
+        //public IPrincipal Account { get; set; }
     }
 
     public static partial class Extensions {
