@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Experience.Models;
 using Newtonsoft.Json.Linq;
-using Experience.Models;
+using System;
 
 namespace Experience.Converters {
     public class ObjectConverter : JsonCreationConverter<Object> {
@@ -15,8 +11,11 @@ namespace Experience.Converters {
                     return typeof(Activity);
                 case "Agent":
                     return typeof(Agent);
-                case "Statement":
-                    return typeof(Statement);
+                case "Group":
+                    return typeof(Group);
+                case "StatementRef":
+                    return typeof(StatementReference);
+                //case "Sub-Statement":
                 default:
                     throw new NotImplementedException();
             }

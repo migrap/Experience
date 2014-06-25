@@ -1,13 +1,9 @@
-﻿using Experience.Models;
+﻿using Experience.Builders;
+using Experience.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Experience.Builders;
 
 namespace Experience {
-	public static partial class Verbs {
+    public static partial class Verbs {
 		//TODO: pull Display values from resource file since default uses localization
 		internal static readonly Verb _answered = new Verb { Id = "http://adlnet.gov/expapi/verbs/answered", Display = "answered" };
 		internal static readonly Verb _attempted = new Verb { Id = "http://adlnet.gov/expapi/verbs/attempted", Display = "attempted" };

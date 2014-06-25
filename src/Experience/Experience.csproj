@@ -82,9 +82,12 @@
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\Mailto.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Statement.cs" />
+    <Compile Include="Models\StatementReference.cs" />
     <Compile Include="Models\Verb.cs" />
+    <Compile Include="ObjectTypes.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

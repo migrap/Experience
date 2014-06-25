@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Experience.Models {
     public class Group : Actor {
         private ICollection<Agent> _agents = new List<Agent>();
         public override string ObjectType {
-            get { return "Group"; }
+            get { return ObjectTypes.Group; }
         }
 
         public ICollection<Agent> Agents {

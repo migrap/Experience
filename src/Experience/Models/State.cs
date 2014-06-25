@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace Experience {
-	public class State {
+﻿namespace Experience {
+    public class State {
 	}
 }
 

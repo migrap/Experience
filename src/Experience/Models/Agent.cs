@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Experience.Models {
+﻿namespace Experience.Models {
     public class Agent : Actor {
         public override string ObjectType {
-            get { return "Agent"; }
+            get { return ObjectTypes.Agent; }
         }
     }
 }

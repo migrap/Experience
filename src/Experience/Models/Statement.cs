@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Experience.Models {
     using Experience.Converters;
@@ -12,8 +9,9 @@ namespace Experience.Models {
     [JsonConverter(typeof(StatementConverter))]
     public class Statement {
         private ICollection<Attachment> _attachments = new List<Attachment>();
-        
-        //public Guid Id { get; set; }
+
+        public Guid Id { get; set; }
+
         [JsonConverter(typeof(ActorConverter))]
         public Actor Actor { get; set; }
 

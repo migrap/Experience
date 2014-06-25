@@ -1,10 +1,6 @@
 ﻿using Experience.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace Experience.Converters {
     public class ActorConverter : JsonCreationConverter<Actor> {

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Experience.Models;
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using Experience.Models;
 using System.Linq;
+using System.Net.Http;
 
 namespace Experience.Builders {
 	internal class GetStatementBuilder : IStatementBuilder {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#if MGP_LATER
+using System;
 
 namespace Experience.Models {
     public class Iri : Uri {
@@ -10,3 +7,5 @@ namespace Experience.Models {
         }
     }
 }
+
+#endif

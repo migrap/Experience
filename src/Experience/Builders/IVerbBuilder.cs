@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace Experience {
-	public interface IVerbBuilder {
+﻿namespace Experience {
+    public interface IVerbBuilder {
 	}
 }
 

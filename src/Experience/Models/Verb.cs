@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Experience.Models {
+﻿namespace Experience.Models {
     public class Verb {
         public string Id { get; set; }
         public Language Display { get; set; }

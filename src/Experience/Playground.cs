@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Experience;
-using Experience.Builders;
+﻿using Experience.Builders;
 using Experience.Models;
+using System;
+using System.Net.Http;
 
 namespace Experience {
     internal static class Playground {
