@@ -1,11 +1,31 @@
 ﻿using Experience.Builders;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Experience {
     public static partial class Extensions {
-		private static TResult Factory<TSource, TResult>(Action<TSource> configure) where TResult : TSource, new() {
+        internal static bool IsA(this Type type, Type typeToBe) {
+            if(!typeToBe.IsGenericTypeDefinition)
+                return typeToBe.IsAssignableFrom(type);
+
+            var toCheckTypes = new List<Type> { type };
+            if(typeToBe.IsInterface) {
+                toCheckTypes.AddRange(type.GetInterfaces());
+            }
+
+            var basedOn = type;
+            while(basedOn.BaseType != null) {
+                toCheckTypes.Add(basedOn.BaseType);
+                basedOn = basedOn.BaseType;
+            }
+
+            return toCheckTypes.Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeToBe);
+        }
+
+        private static TResult Factory<TSource, TResult>(Action<TSource> configure) where TResult : TSource, new() {
 			var result = new TResult();
 			configure(result);
 			return result;

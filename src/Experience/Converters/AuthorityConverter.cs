@@ -1,73 +1,58 @@
-﻿//using Experience.Models;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Newtonsoft.Json.Linq;
+﻿using Experience.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
-//namespace Experience.Converters {
-//    public class AuthorityConverter : JsonCreationConverter<Authority> {
-//        private Dictionary<string, Type> _types = new Dictionary<string, Type>();
+namespace Experience.Converters {
+    public class AuthorityConverter : JsonCreationConverter<Authority> {
+        private Dictionary<string, Type> _types = new Dictionary<string, Type>();
 
-//        public AuthorityConverter() : this(
-//            x => x.Name("Agent").Type<Agent>(), 
-//            x => x.Name("Group").Type<Group>()) {
-//        }
+        public AuthorityConverter() : this(x => x.Add<Agent>(), x => x.Add<Group>()) {
+        }
 
-//        public AuthorityConverter(params Action<IAuthorityConverterBuilder>[] builders) {
-//            foreach(var builder in builders) {
-//                var result = Factory<IAuthorityConverterBuilder, AuthorityConverterBuilder>(builder).Build();
-//                _types.Add(result.Key, result.Value);
-//            }
-//        }
+        public AuthorityConverter(params Action<IAuthorityConverterBuilder>[] builders) {
+            foreach(var builder in builders) {
+                var result = Factory<IAuthorityConverterBuilder, AuthorityConverterBuilder>(builder).Build();
+                _types.Add(result.Key, result.Value);
+            }
+        }
 
-//        protected override Type GetType(Type objectType, JObject jObject) {
-//            if(_types.TryGetValue(GetType(jObject),out Type type)) {
-//                return type;
-//            }
-//            throw new Exception();
-//        }
+        protected override Type GetType(Type objectType, JObject jObject) {
+            if(_types.TryGetValue(GetType(jObject), out Type type)) {
+                return type;
+            }
+            throw new Exception();
+        }
 
-//        private static string GetType(JObject jObject) {
-//            return jObject["ObjectType"].ToObject<string>();
-//        }
+        private static string GetType(JObject jObject) {
+            return jObject["objectType"].ToObject<string>();
+        }
 
-//        private static TResult Factory<TSource, TResult>(Action<TSource> configure) where TResult : TSource, new() {
-//            var result = new TResult();
-//            configure(result);
-//            return result;
-//        }
-//    }
+        private static TResult Factory<TSource, TResult>(Action<TSource> configure) where TResult : TSource, new() {
+            var result = new TResult();
+            configure(result);
+            return result;
+        }
+    }
 
-//    public interface IAuthorityConverterBuilder {
-//        IAuthorityConverterBuilder Name(string value);
-//        IAuthorityConverterBuilder Type(Type value);
-//    }
+    public interface IAuthorityConverterBuilder {
+        void Add<T>(string name = null);
+    }
 
-//    internal class AuthorityConverterBuilder : IAuthorityConverterBuilder {
-//        private string _name;
-//        private Type _type;
-//        IAuthorityConverterBuilder IAuthorityConverterBuilder.Name(string value) {
-//            _name = value;
-//            return this;
-//        }
+    internal class AuthorityConverterBuilder : IAuthorityConverterBuilder {
+        private string _name;
+        private Type _type;
 
-//        IAuthorityConverterBuilder IAuthorityConverterBuilder.Type(Type value) {
-//            _type = value;
-//            return this;
-//        }
+        void IAuthorityConverterBuilder.Add<T>(string name) {
+            _type = typeof(T);
+            _name = name ?? typeof(T).Name;
+        }
 
-//        public KeyValuePair<string,Type> Build() {
-//            return new KeyValuePair<string, Type>(_name, _type);
-//        }
-//    }
-
-//    public static partial class Extensions {
-//        public static IAuthorityConverterBuilder Type<T>(this IAuthorityConverterBuilder builder) {
-//            return builder.Type(typeof(T));
-//        }
-
-        
-//    }
-//}
+        public KeyValuePair<string, Type> Build() {
+            return new KeyValuePair<string, Type>(_name, _type);
+        }
+    }
+}

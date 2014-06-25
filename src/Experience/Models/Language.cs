@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Experience.Converters;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Experience.Models {
+    [JsonConverter(typeof(LanguageConverter))]
     public class Language : Dictionary<CultureInfo, string> {
         public Language() {            
         }

@@ -4,42 +4,8 @@ using System;
 using System.Reflection;
 
 namespace Experience.Converters {
+    //TODO: maybe replace with CustomCreationConverter<T>?
     public abstract class JsonCreationConverter<T> : JsonConverter {
-#if MGP_LATER
-        protected abstract T Create(Type objectType, JObject jObject);
-
-        public override bool CanConvert(Type objectType) {
-            return typeof(T).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
-            if(reader.TokenType == JsonToken.Null) {
-                return null;
-            }
-
-            // Load JObject from stream
-            var jObject = JObject.Load(reader);
-
-            // Create target object based on JObject
-            var target = Create(objectType, jObject);
-
-            // Populate the object properties
-            var writer = new StringWriter();
-            serializer.Serialize(writer, jObject);
-            using (var newReader = new JsonTextReader(new StringReader(writer.ToString()))) {
-                newReader.Culture = reader.Culture;
-                newReader.DateParseHandling = reader.DateParseHandling;
-                newReader.DateTimeZoneHandling = reader.DateTimeZoneHandling;                
-                serializer.Populate(newReader, target);
-            }
-
-            return target;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            serializer.Serialize(writer, value);
-        }
-#else
         protected abstract Type GetType(Type objectType, JObject jObject);
 
         public override bool CanConvert(Type objectType) {
@@ -67,6 +33,5 @@ namespace Experience.Converters {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
             serializer.Serialize(writer, value);
         }
-#endif
     }
 }

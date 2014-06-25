@@ -30,6 +30,7 @@ namespace Experience.Models {
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset Stored { get; set; }
 
+        //[JsonConverter(typeof(AuthorityConverter))]
         public Authority Authority { get; set; }
 
         public Attachments Attachment {
