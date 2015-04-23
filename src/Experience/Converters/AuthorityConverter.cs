@@ -1,10 +1,7 @@
 ﻿using Experience.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace Experience.Converters {
     public class AuthorityConverter : JsonCreationConverter<Authority> {
@@ -21,7 +18,8 @@ namespace Experience.Converters {
         }
 
         protected override Type GetType(Type objectType, JObject jObject) {
-            if(_types.TryGetValue(GetType(jObject), out Type type)) {
+            var type = (Type)null;
+            if(_types.TryGetValue(GetType(jObject), out type)) {
                 return type;
             }
             throw new Exception();

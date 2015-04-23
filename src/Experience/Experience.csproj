@@ -87,7 +87,9 @@
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Statement.cs" />
     <Compile Include="Models\StatementReference.cs" />
+    <Compile Include="Models\Uuid.cs" />
     <Compile Include="Models\Verb.cs" />
+    <Compile Include="Models\Version.cs" />
     <Compile Include="ObjectTypes.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

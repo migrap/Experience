@@ -2,19 +2,10 @@
 
 namespace Experience.Models {
     public class Group : Actor {
-        private ICollection<Agent> _agents = new List<Agent>();
-        public override string ObjectType {
-            get { return ObjectTypes.Group; }
-        }
+        public override string ObjectType => ObjectTypes.Group;
 
-        public ICollection<Agent> Agents {
-            get { return _agents; }
-            set { _agents = value; }
-        }
+        public ICollection<Agent> Agents { get; } = new List<Agent>();
 
-        public InverseFunctionalIdentifier Ifi {
-            get;
-            set;
-        }
+        public InverseFunctionalIdentifier Ifi { get; set; }
     }
 }

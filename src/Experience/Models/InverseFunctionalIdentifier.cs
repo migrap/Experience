@@ -5,15 +5,12 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace Experience.Models {
-    //Inverse Functional Identifier
     public abstract class InverseFunctionalIdentifier {
         [JsonConverter(typeof(MailtoConverter))]
         public Mailto Mbox { get; set; }
-        public string Shasum {
-            get { return Mbox.GetHash(); }
-        }
+        public string Shasum => Mbox.GetHash();
         public string Openid { get; set; }
-        //public IPrincipal Account { get; set; }
+        public object Account { get; set; }
     }
 
     public static partial class Extensions {

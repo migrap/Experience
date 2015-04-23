@@ -60,6 +60,7 @@ namespace Sandbox {
                 //json = json.Replace("und", "en-US");
                 try {
                     statement = Newtonsoft.Json.JsonConvert.DeserializeObject<Statement>(json);
+                    Console.WriteLine(statement);
                 }catch(Exception ex) {
                     Console.WriteLine(ex.Message);
                 }

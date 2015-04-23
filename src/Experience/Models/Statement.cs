@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Experience.Converters;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
-namespace Experience.Models {
-    using Experience.Converters;
-    using Newtonsoft.Json;
-    using Attachments = System.Collections.Generic.ICollection<Attachment>;
-
+namespace Experience.Models {    
+    
     [JsonConverter(typeof(StatementConverter))]
     public class Statement {
-        private ICollection<Attachment> _attachments = new List<Attachment>();
-
-        public Guid Id { get; set; }
+        public Uuid Id { get; set; }
 
         [JsonConverter(typeof(ActorConverter))]
         public Actor Actor { get; set; }
@@ -18,9 +15,9 @@ namespace Experience.Models {
         public Verb Verb { get; set; }
 
         [JsonConverter(typeof(ObjectConverter))]            
-        public Object Object { get; set; }
+        public object Object { get; set; }
 
-        //public Object Result { get; set; }
+        public object Result { get; set; }
 
         public Context Context { get; set; }
 
@@ -30,12 +27,10 @@ namespace Experience.Models {
         [JsonConverter(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset Stored { get; set; }
 
-        //[JsonConverter(typeof(AuthorityConverter))]
         public Authority Authority { get; set; }
 
-        public Attachments Attachment {
-            get { return _attachments; }
-            set { _attachments = value; }
-        }
+        public Version Version { get; set; }
+
+        public ICollection<Attachment> Attachment { get; } = new List<Attachment>();
     }
 }

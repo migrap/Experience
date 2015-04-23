@@ -1,7 +1,4 @@
-﻿using Experience.Converters;
-using Newtonsoft.Json;
-
-namespace Experience.Models {
+﻿namespace Experience.Models {
     public class Authority {
         public string ObjectType { get; set; }
         public Account Account { get; set; }
