@@ -8,18 +8,67 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Dynamic;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Sandbox {
 
 
 	class MainClass {
 		public static void Main(string[] args) {
+            var stmt = new Statement();
+            stmt.Actor = new Agent(name: "Test User", mbox: "mailto:test@beta.projecttincan.com");
+            stmt.Verb = new Verb(x => x.Experienced);
+            stmt.Context = new Context {
+                Registration = Guid.NewGuid(),                
+            };
+            stmt.Context.ContextActivities.Grouping.Add(new Activity {
+                Id = "http://id.tincanapi.com/activity/tincan-prototypes",
+            });
+            stmt.Context.ContextActivities.Category.Add(new Activity {
+                Id = "http://id.tincanapi.com/recipe/tincan-prototypes/launcher/1",
+                Definition = new Definition {
+                    Type = "http://id.tincanapi.com/activitytype/recipe"
+                }
+            });
+            stmt.Context.ContextActivities.Category.Add(new Activity {
+                Id = "http://id.tincanapi.com/activity/tincan-prototypes/launcher-template",
+                Definition = new Definition {
+                    Name = "Tin Can Launcher Template",
+                    Type = "http://id.tincanapi.com/activitytype/source"
+                },
+            });
+
+            stmt.Object = new Activity {
+                Id = "http://id.tincanapi.com/activity/tincan-prototypes/launcher",
+                Definition = new Definition {
+                    Name = "Tin Can Prototypes Launcher",
+                    Description="A tool for launching the Tin Can prototypes. Simulates the role of an LMS in launching experiences.",
+                    Type = "http://id.tincanapi.com/activitytype/lms"
+                },                                
+            };
+
+            stmt.Stored = DateTimeOffset.UtcNow;
+            stmt.Timestamp = DateTimeOffset.UtcNow;
+
+            var settings = new JsonSerializerSettings();
+            settings.Formatting = Formatting.Indented;
+            settings.ContractResolver = new ExperienceCamelCasePropertyNamesContractResolver();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+
+            var json = JsonConvert.SerializeObject(stmt, settings);
+
+            System.Console.WriteLine(json);
+
             var ci = CultureInfo.GetCultureInfo("en-US");
 
             //var authority = "{\"authority\":{\"account\":{\"homePage\":\"http://cloud.scorm.com/\",\"name\":\"anonymous\"},\"objectType\":\"Agent\"}}";
             //var a = Newtonsoft.Json.JsonConvert.DeserializeObject<Authority>(authority);
 
-            var json = "{\"id\":\"dac6f1e4-d670-45e0-9bf8-288289748d02\",\"actor\":{\"name\":\"Mr Coyle\",\"mbox\":\"mailto:mr@coyle.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/attempted\",\"display\":{\"en-US\":\"attempted\"}},\"context\":{\"contextActivities\":{\"grouping\":[{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"objectType\":\"Activity\"}]}},\"timestamp\":\"2014-06-23T23:34:11.265Z\",\"stored\":\"2014-06-23T23:34:11.882Z\",\"authority\":{\"account\":{\"homePage\":\"http://cloud.scorm.com/\",\"name\":\"anonymous\"},\"objectType\":\"Agent\"},\"version\":\"1.0.0\",\"object\":{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"definition\":{\"name\":{\"en-US\":\"Golf Example - Tin Can Course\"},\"description\":{\"en-US\":\"An overview of how to play the great game of golf.\"},\"type\":\"http://adlnet.gov/expapi/activities/course\"},\"objectType\":\"Activity\"}}";
+            //var json = "{\"id\":\"dac6f1e4-d670-45e0-9bf8-288289748d02\",\"actor\":{\"name\":\"Mr Coyle\",\"mbox\":\"mailto:mr@coyle.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/attempted\",\"display\":{\"en-US\":\"attempted\"}},\"context\":{\"contextActivities\":{\"grouping\":[{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"objectType\":\"Activity\"}]}},\"timestamp\":\"2014-06-23T23:34:11.265Z\",\"stored\":\"2014-06-23T23:34:11.882Z\",\"authority\":{\"account\":{\"homePage\":\"http://cloud.scorm.com/\",\"name\":\"anonymous\"},\"objectType\":\"Agent\"},\"version\":\"1.0.0\",\"object\":{\"id\":\"http://tincanapi.com/GolfExample_TCAPI\",\"definition\":{\"name\":{\"en-US\":\"Golf Example - Tin Can Course\"},\"description\":{\"en-US\":\"An overview of how to play the great game of golf.\"},\"type\":\"http://adlnet.gov/expapi/activities/course\"},\"objectType\":\"Activity\"}}";
 
             
 
@@ -30,17 +79,25 @@ namespace Sandbox {
 			var client = new HttpClient();
 			client.BaseAddress = new Uri("http://cloud.scorm.com/ScormEngineInterface/TCAPI/public/");
 			client.DefaultRequestHeaders.Authorization("test", "test");
-			client.DefaultRequestHeaders.Add("X-Experience-API-Version", "1.0.0");
+			client.DefaultRequestHeaders.Add("X-Experience-API-Version", "1.0.1");
             ////http://cloud.scorm.com/ScormEngineInterface/TCAPI/public/statement"	string
             ////http://cloud.scorm.com/ScormEngineInterface/TCAPI/public/statements?limit=10}	System.Uri
             ////http://cloud.scorm.com/ScormEngineInterface/TCAPI/public/statements?limit=25&related_activities=false&related_agents=false
             //var result = default(Task<HttpResponseMessage>);
 
-            //result = client.PostAsync(statement: s => s
-            //  .Actor("here@home.com")
-            //  .Verb(verb => verb.Completed)
-            //  .Object()
-            //);
+            var sr = client.PostAsync(statement: s => s
+                .Actor(stmt.Actor)
+                .Verb(stmt.Verb)
+                .Object()
+            );
+
+            var pr = client.PostAsync(statement: s => s
+              .Actor("here@home.com")
+              .Verb(verb => verb.Completed)
+              .Object()
+            ).Result;
+
+            
 
             //result.Wait();
 
@@ -55,38 +112,69 @@ namespace Sandbox {
             var statement = (Statement)null;
 
             var jobj = (JObject)JsonConvert.DeserializeObject(result);
-            foreach(var item in jobj["statements"]) {
-                json = JsonConvert.SerializeObject(item);
-                //json = json.Replace("und", "en-US");
-                try {
-                    statement = Newtonsoft.Json.JsonConvert.DeserializeObject<Statement>(json);
-                    Console.WriteLine(statement);
-                }catch(Exception ex) {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+            var statements = jobj["statements"].OfType<JObject>().Select(x => x.ToObject<Statement>());
+            //foreach(var item in jobj["statements"]) {
+            //    json = JsonConvert.SerializeObject(item);
+            //    //json = json.Replace("und", "en-US");
+            //    try {
+            //        statement = Newtonsoft.Json.JsonConvert.DeserializeObject<Statement>(json);
+            //        Console.WriteLine(statement);
+            //    }catch(Exception ex) {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //}
 
 
             Console.WriteLine(result);
 
 			Console.ReadLine();
 		}
-	}    
+	}
 
     public delegate Statement PostStatementDelegate(Actor actor, Verb verb, Object @object, Object result = null, Object context = null, DateTimeOffset? timestamp = null, Authority authority = null, Object attachments = null);
 
-	public static partial class Extensions{
+    public static partial class Extensions {
 
-        public static void xPostAsync(this HttpClient client, Func<PostStatementDelegate,Statement> statement) {
+        public static void xPostAsync(this HttpClient client, Func<PostStatementDelegate, Statement> statement) {
             statement((actor, verb, obj, result, context, timestamp, authority, attachements) => {
                 return (Statement)null;
             });
         }
 
-		public static void Authorization(this HttpRequestHeaders headers,string username, string password){
-			headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", username, password))));
-		}
-	}
+        public static void Authorization(this HttpRequestHeaders headers, string username, string password) {
+            headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", username, password))));
+        }
+
+        public static string ObjectType(this Statement statement, ObjectTypeExtensionDelegate value) {
+            return value()();
+        }
+    }
+
+    public class ExperienceCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) {
+            JsonProperty property = base.CreateProperty(member, memberSerialization);
+
+            if(property.DeclaringType == typeof(Statement) && property.PropertyType == typeof(AttachmentCollection)) {
+                property.ShouldSerialize = instance => {
+                    return (instance as Statement).Attachment.Any();
+                };
+            }
+            if(property.DeclaringType == typeof(ContextActivities) && typeof(IEnumerable<Activity>).IsAssignableFrom(property.PropertyType)) {
+                property.ShouldSerialize = instance => {
+                    var value = typeof(ContextActivities).GetProperties().First(x => x.Name.Equals(property.PropertyName, StringComparison.OrdinalIgnoreCase)).GetValue(instance);
+                    return (value as IEnumerable<Activity>).Any();
+                };
+            }
+
+            return property;
+        }
+    }
+
+    public static partial class Extensions {
+        public static bool Any<TSource>(this IEnumerable<TSource> source) {
+            return null != source && Enumerable.Any(source);
+        }
+    }
 }
 
 

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Experience.Builders {
     public interface IPostStatementBuilder {
+        IPostStatementBuilder Actor(Actor value);
         IPostStatementBuilder Actor(string value);
         IPostStatementBuilder Verb(Verb value);
         IPostStatementBuilder Object();
@@ -21,8 +22,20 @@ namespace Experience.Builders {
         public HttpRequestMessage Build() {
             var uri = "statements";
             var request = new HttpRequestMessage(HttpMethod.Post, new Uri(uri, UriKind.RelativeOrAbsolute));
+
             request.Content = new StringContent(_jobject.ToString(), Encoding.UTF8, "application/json");
+
             return request;
+        }
+
+        public IPostStatementBuilder Actor(Actor value) {
+            _jobject["actor"] = new JObject(
+                new JProperty("mbox", value.Mbox.ToString()),
+                new JProperty("name", value.Name),
+                new JProperty("objectType", value.ObjectType)
+            );
+
+            return this;
         }
 
         public IPostStatementBuilder Actor(string value) {
@@ -47,7 +60,6 @@ namespace Experience.Builders {
             _jobject["object"]["definition"]["description"] = new JObject(new JProperty("en-US", "Example activity definition"));
 
             return this;
-
         }
 
         public IPostStatementBuilder Verb(Verb value) {

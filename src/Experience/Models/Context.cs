@@ -8,7 +8,7 @@ namespace Experience.Models {
 
         public object Team { get; set; }
 
-        public ContextActivities ContextActivities { get;set; }
+        public ContextActivities ContextActivities { get; set; } = new ContextActivities();
 
         public string Revision { get; set; }
 

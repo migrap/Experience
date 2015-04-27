@@ -7,6 +7,10 @@ namespace Experience.Converters {
             return typeof(DateTimeOffset).IsAssignableFrom(objectType);
         }
 
+        public override bool CanRead => true;
+
+        public override bool CanWrite => true;
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             if(reader.TokenType == JsonToken.String) {
                 var input = (string)reader.Value;
@@ -20,7 +24,7 @@ namespace Experience.Converters {
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            throw new NotImplementedException();
+            writer.WriteValue(((DateTimeOffset)value).ToString("yyyy-MM-ddTHH:mm:ssZ"));
         }
     }
 }

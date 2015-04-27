@@ -8,6 +8,10 @@ namespace Experience.Converters {
             return typeof(Mailto).IsAssignableFrom(objectType);
         }
 
+        public override bool CanRead => true;
+
+        public override bool CanWrite => false;
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             if(reader.TokenType == JsonToken.String) {
                 var input = (string)reader.Value;

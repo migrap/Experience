@@ -9,6 +9,10 @@ namespace Experience.Converters {
             return typeof(Statement).IsEquivalentTo(objectType);
         }
 
+        public override bool CanRead => true;
+
+        public override bool CanWrite => false;
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             var jObject = JObject.Load(reader);
             var target = new Statement();

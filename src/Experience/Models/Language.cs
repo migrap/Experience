@@ -6,7 +6,7 @@ using System.Globalization;
 namespace Experience.Models {
     [JsonConverter(typeof(LanguageConverter))]
     public class Language : Dictionary<CultureInfo, string> {
-        public Language() {            
+        public Language() {
         }
 
         public Language(string value)

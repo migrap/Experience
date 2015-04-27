@@ -8,8 +8,13 @@ namespace Experience.Models {
     public abstract class InverseFunctionalIdentifier {
         [JsonConverter(typeof(MailtoConverter))]
         public Mailto Mbox { get; set; }
-        public string Shasum => Mbox.GetHash();
+
+        [JsonProperty("mbox_sha1sum")]
+        public string Shasum { get; set; }
+        //public string Shasum => Mbox.GetHash();
+
         public string Openid { get; set; }
+
         public object Account { get; set; }
     }
 
