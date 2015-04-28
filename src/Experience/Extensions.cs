@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
+using Experience.Models;
+using System.Text;
+using System.Net.Http.Formatting;
 
 namespace Experience {
     public static partial class Extensions {
@@ -37,6 +40,14 @@ namespace Experience {
 
         public static Task<HttpResponseMessage> PostAsync(this HttpClient client, Action<IPostStatementBuilder> statement = null) {
             return client.SendAsync(request: Factory<IPostStatementBuilder, PostStatementBuilder>(statement).Build());
+        }
+
+        public static Task<HttpResponseMessage> PostAsync(this HttpClient client, Func<HttpContent> content) {
+            var uri = "statements";
+            var request = new HttpRequestMessage(HttpMethod.Post, new Uri(uri, UriKind.RelativeOrAbsolute));
+            request.Content = content();
+
+            return client.SendAsync(request);
         }
 
 		//public delegate HttpRequestMessage GetStatement(Func<Func<IVerbBuilder, Verb>> verb = null, int? limit = null, string actor = null);

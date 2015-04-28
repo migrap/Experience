@@ -13,6 +13,7 @@ using System.Dynamic;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Net.Http.Formatting;
 
 namespace Sandbox {
 
@@ -85,19 +86,19 @@ namespace Sandbox {
             ////http://cloud.scorm.com/ScormEngineInterface/TCAPI/public/statements?limit=25&related_activities=false&related_agents=false
             //var result = default(Task<HttpResponseMessage>);
 
-            var sr = client.PostAsync(statement: s => s
-                .Actor(stmt.Actor)
-                .Verb(stmt.Verb)
-                .Object()
-            );
+            //var sr = client.PostAsync(statement: s => s
+            //    .Actor(stmt.Actor)
+            //    .Verb(stmt.Verb)
+            //    .Object()
+            //);
 
-            var pr = client.PostAsync(statement: s => s
-              .Actor("here@home.com")
-              .Verb(verb => verb.Completed)
-              .Object()
-            ).Result;
+            client.PostAsync(() => new ObjectContent<Statement>(stmt, new JsonMediaTypeFormatter { SerializerSettings = settings }));
 
-            
+            //var pr = client.PostAsync(statement: s => s
+            //  .Actor("here@home.com")
+            //  .Verb(verb => verb.Completed)
+            //  .Object()
+            //).Result;            
 
             //result.Wait();
 
@@ -159,11 +160,16 @@ namespace Sandbox {
                     return (instance as Statement).Attachment.Any();
                 };
             }
+
             if(property.DeclaringType == typeof(ContextActivities) && typeof(IEnumerable<Activity>).IsAssignableFrom(property.PropertyType)) {
                 property.ShouldSerialize = instance => {
-                    var value = typeof(ContextActivities).GetProperties().First(x => x.Name.Equals(property.PropertyName, StringComparison.OrdinalIgnoreCase)).GetValue(instance);
+                    var value = typeof(ContextActivities).GetPropertyIgnoringCase(property.PropertyName).GetValue(instance);
                     return (value as IEnumerable<Activity>).Any();
                 };
+            }
+
+            if(typeof(InverseFunctionalIdentifier).IsAssignableFrom(property.DeclaringType) && property.PropertyName.Equals("Shasum")) {
+                property.PropertyName = "mbox_sha1sum";
             }
 
             return property;
@@ -173,6 +179,10 @@ namespace Sandbox {
     public static partial class Extensions {
         public static bool Any<TSource>(this IEnumerable<TSource> source) {
             return null != source && Enumerable.Any(source);
+        }
+
+        public static PropertyInfo GetPropertyIgnoringCase(this Type type, string name) {
+            return type.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         }
     }
 }
