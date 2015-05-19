@@ -14,27 +14,36 @@ using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
+using Experience.Converters;
 
 namespace Sandbox {
 
 
 	class MainClass {
 		public static void Main(string[] args) {
+            var verb = new Verb(x => x.Experienced);
+
             var stmt = new Statement();
+            stmt.Actor(x => x.Agent(name: "", mbox: ""));
+            stmt.Verb(x => x.Experienced);
+
             stmt.Actor = new Agent(name: "Test User", mbox: "mailto:test@beta.projecttincan.com");
             stmt.Verb = new Verb(x => x.Experienced);
             stmt.Context = new Context {
                 Registration = Guid.NewGuid(),                
             };
+
             stmt.Context.ContextActivities.Grouping.Add(new Activity {
                 Id = "http://id.tincanapi.com/activity/tincan-prototypes",
             });
+
             stmt.Context.ContextActivities.Category.Add(new Activity {
                 Id = "http://id.tincanapi.com/recipe/tincan-prototypes/launcher/1",
                 Definition = new Definition {
                     Type = "http://id.tincanapi.com/activitytype/recipe"
                 }
             });
+
             stmt.Context.ContextActivities.Category.Add(new Activity {
                 Id = "http://id.tincanapi.com/activity/tincan-prototypes/launcher-template",
                 Definition = new Definition {
@@ -149,7 +158,21 @@ namespace Sandbox {
         public static string ObjectType(this Statement statement, ObjectTypeExtensionDelegate value) {
             return value()();
         }
+
+        public static void Actor(this Statement statement, Func<Statement,Actor> actor) {
+            statement.Actor = actor(statement);
+        }        
+
+        public static Agent Agent(this Statement statement, string name, string mbox) {
+            return new Agent(name, mbox);
+        }
+
+        public static void Verb(this Statement statement, VerbExtensionDelegate verb) {
+            statement.Verb = verb()();
+        }
     }
+
+    public interface IStatementExtension : IVerbExtension { }
 
     public class ExperienceCamelCasePropertyNamesContractResolver : CamelCasePropertyNamesContractResolver {
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) {
@@ -170,6 +193,10 @@ namespace Sandbox {
 
             if(typeof(InverseFunctionalIdentifier).IsAssignableFrom(property.DeclaringType) && property.PropertyName.Equals("Shasum")) {
                 property.PropertyName = "mbox_sha1sum";
+            }
+
+            if(typeof(Language).IsAssignableFrom(property.PropertyType)) {
+                property.Converter = new LanguageConverter();
             }
 
             return property;

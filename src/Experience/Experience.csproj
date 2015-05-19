@@ -71,7 +71,6 @@
     <Compile Include="Converters\StatementConverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Extensions.StatementBuilder.cs" />
-    <Compile Include="Extensions.Verbs.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Actor.cs" />
     <Compile Include="Models\Agent.cs" />
